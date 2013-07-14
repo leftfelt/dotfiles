@@ -1,0 +1,6 @@
+defkanji utf-8
+escape ^av
+
+hardstatus on
+hardstatus alwayslastline "screen | %w | %u %= %m/%d %D %c"
+termcapinfo xterm 'is=\E[r\E[m\E[2J\E[H\E[?7h\E[?1;4;6l'
