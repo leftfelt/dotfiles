@@ -15,7 +15,7 @@ NeoBundle 'Shougo/vimproc.git' "cd ~/.vim/.bundle/vimprocしてmake -f make_unix
 NeoBundle 'Shougo/neosnippet.git' "補完
 "NeoBundle 'scrooloose/nerdcommenter.git' "トグる
 "NeoBundle 'vim-scripts/Align.git' "テキスト整形
-NeoBundle 'honza/snipmate-snippets.git' "補完
+NeoBundle 'scrooloose/snipmate-snippets.git' "補完
 NeoBundle 'Shougo/unite.vim.git' "ファイラ・ランチャ等
 NeoBundle 'Sixeight/unite-grep.git' "uniteにgrep結果表示
 NeoBundle 'h1mesuke/unite-outline.git' "クラス・関数一覧表示、ジャンプ
@@ -100,8 +100,8 @@ noremap <C-U><C-G> :Unite grep<CR><CR><C-R><C-W><CR>
 noremap <C-U><C-V> :Unite svn/status<CR>
 
 "部分一致
-call unite#set_substitute_pattern('file', '[^~.]\zs/', '*/*', 50)
-call unite#set_substitute_pattern('file', '/\ze[^*]', '/*', 30)
+call unite#set_profile('[^~.]\zs/', '*/*', 50)
+call unite#set_profile('/\ze[^*]', '/*', 30)
 
 "uniteを開いている間のキーマッピング
 autocmd FileType unite call s:unite_my_settings()
