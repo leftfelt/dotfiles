@@ -1,4 +1,25 @@
 "----------------------------------------
+" Setup
+"----------------------------------------
+" $ mkdir -p ~/.vim/.bundle
+" $ mkdir -p ~/.vim/tags
+" $ vim
+" 	:NeoBundleInstall
+" 	:q
+" $ cd ~/.vim/.bundle/vimproc
+" $ make -f make_unix.mak
+
+"----------------------------------------
+" Usage
+"----------------------------------------
+" Ctrl+U+T カーソル下の単語の定義箇所を検索
+" Ctrl+U+G カーソル下の単語を検索
+" Ctrl+U+F ファイラーを開く
+" Ctrl+U+O ファイル内クラス・関数一覧
+" Ctrl+U+R 最近開いたファイル一覧
+" Ctrl+U+B 現在開いているファイル一覧
+
+"----------------------------------------
 " plugin - NeoBundle
 "----------------------------------------
 if has('vim_starting')
@@ -38,6 +59,8 @@ set autoindent
 set incsearch
 set wildmenu wildmode=list:full
 set modifiable
+set ignorecase "大文字・小文字を区別しない
+set wrapscan
 
 set backspace=start,eol,indent "バックスペースでなんでも消せるように
 set whichwrap=b,s,[,],<,>,~ "左右キーで次行頭・前行末にいけるように
@@ -95,10 +118,11 @@ endfunction
 "------------------------------------
 "" unite.vim
 "------------------------------------
-"" 入力モードで開始する
+"" 1なら入力モードで開始する
 let g:unite_enable_start_insert=0
 "file_mruの表示フォーマットを指定。空にすると表示スピードが高速化される
 let g:unite_source_file_mru_filename_format = ''
+
 " バッファ一覧（今開いているファイル一覧）
 noremap <C-U><C-B> :Unite buffer<CR>
 " ファイル一覧
@@ -146,6 +170,12 @@ inoremap <expr><BS> neocomplcache#smart_close_popup() . "\<BS>"
 "改行で補完候補の確定
 inoremap <expr><CR> neocomplcache#close_popup() ? "" : "\<CR>"
 
+"tabで補完候補の選択を行う
+imap <expr><TAB>
+	\ pumvisible() ? "\<Down>" :
+	\ neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
+
 "------------------------------------
 "" neosnippet.vim
 "------------------------------------
@@ -153,15 +183,6 @@ inoremap <expr><CR> neocomplcache#close_popup() ? "" : "\<CR>"
 if has('conceal')
   set conceallevel=2 concealcursor=i
 endif
-
-"------------------------------------
-"" SuperTab
-"------------------------------------
-"tabで補完候補の選択を行う
-imap <expr><TAB>
-	\ pumvisible() ? "\<Down>" :
-	\ neosnippet#expandable() <Bar><Bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-inoremap <expr><S-TAB> pumvisible() ? "\<Up>" : "\<S-TAB>"
 
 "------------------------------------
 "" auto command
