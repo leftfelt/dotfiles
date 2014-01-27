@@ -19,7 +19,7 @@ NeoBundle 'Shougo/vimfiler.git' "ファイラ・ランチャ等
 NeoBundle 'Sixeight/unite-grep.git' "uniteにgrep結果表示
 NeoBundle 'h1mesuke/unite-outline.git' "クラス・関数一覧表示、ジャンプ
 NeoBundle 'vim-scripts/jshint.vim' "JSHint
-NeoBundle "git://github.com/tsukkee/unite-tag.git" "関数定義箇所ジャンプ
+NeoBundle "tsukkee/unite-tag.git" "関数定義箇所ジャンプ
 
 if has('win32') + has('win64')
 	let ostype = "Win"
@@ -77,22 +77,19 @@ let g:vimfiler_edit_action = 'tabopen'
 " unite-tag
 "------------------------------------
 let g:tagsdir='~/.vim/tags'
+" :CreateTagsで現在開いているファイル形式のtagsファイルを作る
+command! -nargs=0 CreateTags :call CreateTags()
+
 function! CreateTags()
 	echo 'start create tags file ...'
 	let ret = system(printf("ctags -R --append=yes --languages=%s -f %s/%s.tags `pwd`", &filetype, g:tagsdir, &filetype))
 	echo ret
 	echo 'complete!'
+	call SetTagsFile()
 endfunction
-" :CreateTagsで現在開いているファイル形式のtagsファイルを作る
-command! -nargs=0 CreateTags :call CreateTags()
+
 function! SetTagsFile()
-	let $TAGSFILE=printf("%s/%s.tags",g:tagsdir, &filetype)
-	set tags+=$TAGSFILE
-	sleep 10
-endfunction
-function! UniteTag()
-"	call SetTagsFile()
-	exe ":Unite tag:<cword>"
+	exe printf(":set tags+=%s/%s.tags",g:tagsdir, &filetype)
 endfunction
 
 "------------------------------------
@@ -113,7 +110,7 @@ noremap <C-U><C-O> :Unite outline<CR>
 " カーソル下の単語でgrepした結果をuniteに表示 「<C-R><C-W>」でカーソル下の単語を入力しておく
 noremap <C-U><C-G> :Unite grep<CR><CR><C-R><C-W><CR>
 
-noremap <C-U><C-T> :call UniteTag()<CR>
+noremap <C-U><C-T> :Unite tag:<C-R><C-W><CR>
 
 "部分一致
 call unite#custom#substitute('file', '[^~.]\zs/', '*/*', 50)
@@ -125,7 +122,7 @@ function! s:unite_my_settings()"{{{
 	imap <buffer> <ESC> <Plug>(unite_insert_leave)
 	"ESCでuniteを終了
 	nmap <buffer> <ESC> <Plug>(unite_exit)
-	"改行で横に分割して開く
+	"改行で別タブを開く
 	inoremap <silent> <buffer> <expr> <CR> unite#do_action('tabopen')
 	nnoremap <silent> <buffer> <expr> <CR> unite#do_action('tabopen')
 endfunction"}}}
@@ -205,12 +202,12 @@ augroup Autocmd
 	"読み込み時に自動実行される
 	function! s:read()
 		call s:setSnippetsDirectory()
+		call SetTagsFile()
 	endfunction
 
 	"保存した時に save()を自動実行
 	au BufWritePre * call s:save()
 	"開いた時に read()を自動実行
 	au BufReadPost * call s:read()
-	au Filetype * call SetTagsFile()
 
 augroup END
