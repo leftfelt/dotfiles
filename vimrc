@@ -18,6 +18,8 @@
 " Ctrl+U+O ファイル内クラス・関数一覧
 " Ctrl+U+R 最近開いたファイル一覧
 " Ctrl+U+B 現在開いているファイル一覧
+" 
+" :Createtags tagsファイルを作成する
 
 "----------------------------------------
 " plugin - NeoBundle
@@ -103,14 +105,15 @@ let g:tagsdir='~/.vim/tags'
 " :CreateTagsで現在開いているファイル形式のtagsファイルを作る
 command! -nargs=0 CreateTags :call CreateTags()
 
+" 現在のディレクトリ以下のtagsファイルを作成する
 function! CreateTags()
 	echo 'start create tags file ...'
 	let ret = system(printf("ctags -R --append=yes --languages=%s -f %s/%s.tags `pwd`", &filetype, g:tagsdir, &filetype))
-	echo ret
 	echo 'complete!'
 	call SetTagsFile()
 endfunction
 
+" 現在開いているファイル形式のtagsファイルを設定する
 function! SetTagsFile()
 	exe printf(":set tags+=%s/%s.tags",g:tagsdir, &filetype)
 endfunction
