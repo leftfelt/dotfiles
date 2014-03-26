@@ -20,6 +20,8 @@
 " Ctrl+U+B 現在開いているファイル一覧
 " 
 " :Createtags tagsファイルを作成する
+" :PhpcsEnabled phpcsによるチェックを有効化します
+" :PhpcsDisabled phpcsによるチェックを無効化します
 
 "----------------------------------------
 " plugin - NeoBundle
@@ -90,7 +92,11 @@ highlight PmenuSbar ctermbg=gray ctermfg=black
 ""php
 "------------------------------------
 "保存時にphpcsを実行するか
-let g:phpcs_enabled=1
+let g:phpcs_enabled = 1
+" 有効化
+command! -nargs=0 PhpcsEnabled :let g:phpcs_enabled = 1
+" 無効化
+command! -nargs=0 PhpcsDisabled :let g:phpcs_enabled = 0
 
 "------------------------------------
 "" vimfiler
