@@ -89,13 +89,13 @@ highlight PmenuSel ctermbg=red ctermfg=white
 highlight PmenuSbar ctermbg=gray ctermfg=black
 
 "------------------------------------
-""php
+""phpcs
 "------------------------------------
 "保存時にphpcsを実行するか
 let g:phpcs_enabled = 1
-" 有効化
+" Phpcs有効化
 command! -nargs=0 PhpcsEnabled :let g:phpcs_enabled = 1
-" 無効化
+" Phpcs無効化
 command! -nargs=0 PhpcsDisabled :let g:phpcs_enabled = 0
 
 "------------------------------------
@@ -214,6 +214,10 @@ augroup Autocmd
 		let ret = system(printf("phpcs --standard=PSR2  %s", expand('%')))
 		echo ret
 	endfunction
+	function! s:phpmd()
+		let ret = system(printf("phpmd %s text design,unusedcode", expand('%')))
+		echo ret
+	endfunction
 	" JSHint(保存時失敗したら警告）
 	function! s:jshint()
 		exe ":JSHint"
@@ -222,6 +226,7 @@ augroup Autocmd
 	function! s:save()
 		if &filetype == "php"
 			call s:phplint()
+			call s:phpmd()
 			if g:phpcs_enabled == 1
 				call s:phpcs()
 			endif
@@ -236,7 +241,7 @@ augroup Autocmd
 	endfunction
 
 	"保存した時に save()を自動実行
-	au BufWritePre * call s:save()
+	au BufWritePost * call s:save()
 	"開いた時に read()を自動実行
 	au BufReadPost * call s:read()
 
