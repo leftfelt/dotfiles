@@ -28,8 +28,8 @@
 "----------------------------------------
 if has('vim_starting')
   set runtimepath+=~/.vim/.bundle/neobundle.vim
-filetype off
-  call neobundle#rc(expand('~/.vim/.bundle'))
+  filetype off
+  call neobundle#begin(expand('~/.vim/.bundle'))
   filetype plugin on
   filetype indent on
 endif
@@ -45,7 +45,7 @@ NeoBundle 'Sixeight/unite-grep.git' "uniteにgrep結果表示
 NeoBundle 'h1mesuke/unite-outline.git' "クラス・関数一覧表示、ジャンプ
 NeoBundle 'vim-scripts/jshint.vim' "JSHint
 NeoBundle "tsukkee/unite-tag.git" "関数定義箇所ジャンプ
-
+call neobundle#end()
 if has('win32') + has('win64')
 	let ostype = "Win"
 elseif has('mac')
